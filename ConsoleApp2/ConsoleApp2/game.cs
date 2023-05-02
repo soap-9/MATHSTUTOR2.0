@@ -17,8 +17,7 @@ namespace eman2004
         {
             var cards = pack.GetCards(3);
 
-            var answer = AskQuestion(cards);
-            var isCorrect = CheckAnswer(cards, answer);
+            var (answer, isCorrect, expectedAnswer) = CheckAnswer(cards, AskQuestion(cards));
 
             if (isCorrect)
             {
@@ -26,7 +25,7 @@ namespace eman2004
             }
             else
             {
-                Console.WriteLine("Incorrect.");
+                Console.WriteLine($"Incorrect. The correct answer is {expectedAnswer}.");
             }
 
             Console.WriteLine();
@@ -45,7 +44,7 @@ namespace eman2004
             return Console.ReadLine();
         }
 
-        private bool CheckAnswer(List<Card> cards, string answer)
+        private (string answer, bool isCorrect, string expectedAnswer) CheckAnswer(List<Card> cards, string answer)
         {
             var number1 = cards[0].Number;
             var number2 = cards[1].Number;
@@ -53,7 +52,7 @@ namespace eman2004
 
             var expectedAnswer = EvaluateExpression($"{number1} {operation} {number2}");
 
-            return expectedAnswer == answer;
+            return (answer, expectedAnswer == answer, expectedAnswer);
         }
 
         private string EvaluateExpression(string expression)
